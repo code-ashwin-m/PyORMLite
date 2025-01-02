@@ -1,7 +1,7 @@
 Here’s the updated implementation of the BaseDao class, which now includes QueryBuilder, DeleteBuilder, and UpdateBuilder to support more flexible and readable query operations. These builders allow developers to construct queries programmatically without writing raw SQL.
 
 QueryBuilder Classes
-
+```python
 class QueryBuilder:
     def __init__(self, table):
         self.table = table
@@ -74,9 +74,10 @@ class UpdateBuilder:
         query = f"UPDATE {self.table} SET {set_clause}{where_clause};"
         params = list(self.updates.values()) + [value for _, value in self.conditions]
         return query, params
-
+```
 Updated BaseDao Implementation
 
+```python
 class BaseDao:
     _connection = None
     _cursor = None
@@ -149,50 +150,53 @@ class BaseDao:
         for field_name in row.keys():
             setattr(instance, field_name, row[field_name])
         return instance
+```
 
 Usage Example
 
 Define Models
-
+```python
 class User(BaseModel):
     _table = "users"
     _fields = [
         FieldInteger("id", primary_key=True),
         FieldString("name", nullable=False),
     ]
+```
 
 Set Up Database
-
+```python
 BaseDao.set_database(":memory:")
 BaseDao.create_table(User)
+```
 
 Insert Data
-
+```python
 user = User()
 user.name = "John Doe"
 BaseDao.save(User, user)
-
+```
 Query Data
-
+```python
 users = BaseDao.all(User)
 for user in users:
     print(f"User: {user.name}")
 
 user = BaseDao.get(User, id=1)
 print(f"User with ID 1: {user.name}")
-
+```
 Update Data
-
+```python
 BaseDao.update(User, {"name": "Jane Doe"}, id=1)
 user = BaseDao.get(User, id=1)
 print(f"Updated User: {user.name}")
-
+```
 Delete Data
-
+```python
 BaseDao.delete(User, id=1)
 user = BaseDao.get(User, id=1)
 print(f"User after deletion: {user}")
-
+```
 Output Example
 
 User: John Doe
