@@ -5,7 +5,7 @@ Here’s the updated implementation:
 Updated Implementation
 
 Expose Query Builders
-
+```python
 class BaseDao:
     _connection = None
     _cursor = None
@@ -52,6 +52,7 @@ class BaseDao:
     @classmethod
     def update_builder(cls, model):
         return UpdateBuilder(model._meta["table_name"])
+```
 
 Query Builders
 
@@ -60,7 +61,7 @@ These builders remain the same as described earlier.
 Usage Example
 
 Define Models
-
+```python
 class User(BaseModel):
     _table = "users"
     _fields = [
@@ -68,9 +69,9 @@ class User(BaseModel):
         FieldString("name", nullable=False),
         FieldString("email", nullable=True),
     ]
-
+```
 Set Up Database
-
+```python
 BaseDao.set_database(":memory:")
 BaseDao.create_table(User)
 
@@ -84,18 +85,19 @@ user2 = User()
 user2.name = "Jane Doe"
 user2.email = "jane@example.com"
 BaseDao.save(User, user2)
+```
 
 Build and Execute Queries
 
 Complex SELECT Query
-
+```python
 query, params = BaseDao.query_builder(User).select("id", "name").where(email="john@example.com").build()
 results = BaseDao.execute_query(query, params)
 for row in results:
     print(dict(row))
-
+```
 Update Query
-
+```python
 query, params = BaseDao.update_builder(User).set(name="John Smith").where(id=1).build()
 BaseDao.execute_query(query, params)
 
@@ -103,9 +105,9 @@ BaseDao.execute_query(query, params)
 query, params = BaseDao.query_builder(User).where(id=1).build()
 updated_user = BaseDao.execute_query(query, params)
 print(dict(updated_user[0]))
-
+```
 Delete Query
-
+```python
 query, params = BaseDao.delete_builder(User).where(name="Jane Doe").build()
 BaseDao.execute_query(query, params)
 
@@ -113,7 +115,7 @@ BaseDao.execute_query(query, params)
 query, params = BaseDao.query_builder(User).build()
 all_users = BaseDao.execute_query(query)
 print([dict(row) for row in all_users])
-
+```
 Output Example
 
 Initial SELECT Query:
