@@ -4,6 +4,7 @@ Here’s the updated implementation, where CRUD operations and table creation ar
 
 Updated Implementation
 
+```python
 import sqlite3
 
 
@@ -193,7 +194,7 @@ for user in users:
     print(f"User: {user.name}")
     for post in user.Post:
         print(f"  Post: {post.title}")
-
+```
 Changes and Features
 	1.	BaseDao Class:
 	•	Handles database-related operations such as table creation, CRUD operations, and relation loading.
