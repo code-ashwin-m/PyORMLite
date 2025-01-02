@@ -5,7 +5,7 @@ Complete Code
 Field Definitions
 
 These define the schema of each model.
-
+```python
 class FieldBase:
     def __init__(self, name, field_type, nullable=True, primary_key=False):
         self.name = name
@@ -34,11 +34,12 @@ class FieldList:
     def __init__(self, model, lazyload=True):
         self.model = model
         self.lazyload = lazyload
+```
 
 Model Base Class
 
 Used to define models (e.g., User, Post).
-
+```python
 class BaseModel:
     _table = None
     _fields = []
@@ -49,11 +50,11 @@ class BaseModel:
             "table_name": cls._table,
             "fields": {field.name: field for field in cls._fields},
         }
-
+```
 Query Builders
 
 These builders provide chainable methods for constructing SELECT, DELETE, and UPDATE SQL queries.
-
+```python
 class QueryBuilder:
     def __init__(self, table):
         self.table = table
@@ -215,11 +216,11 @@ class UpdateBuilder:
 
         query = f"UPDATE {self.table} SET {set_clause}{where_clause};"
         return query, params
-
+```
 BaseDao
 
 Handles database operations and exposes builders to the user.
-
+```python
 class BaseDao:
     _connection = None
     _cursor = None
@@ -261,9 +262,9 @@ class BaseDao:
     @classmethod
     def update_builder(cls, model):
         return UpdateBuilder(model._table)
-
+```
 Usage
-
+```python
 class User(BaseModel):
     _table = "users"
     _fields = [
@@ -281,7 +282,7 @@ BaseDao.execute_query("INSERT INTO users (name, email) VALUES (?, ?)", ["John Do
 # Query users
 query, params = BaseDao.query_builder(User).equal("name", "John Doe").build()
 print(BaseDao.execute_query(query, params))
-
+```
 Explanation
 	1.	Models: Define schema using BaseModel and fields.
 	2.	Builders: Use chainable methods to construct complex queries.
